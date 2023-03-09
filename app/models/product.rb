@@ -17,11 +17,21 @@ class Product < ApplicationRecord
 
     
     def self.ransackable_scopes(auth_object = nil)
-		[:with_images, :without_images]
+		[:with_images, :without_images, :lt_5, :gt_5]
 	end
 
     def self.with_images
         ids = Product.joins(:images_attachments).uniq.map(&:id)
+        Product.where(id: ids)
+    end
+
+    def self.lt_5
+        ids = Product.includes(:variants).select{|pr| pr.variants.count < 5}
+        Product.where(id: ids)
+    end
+
+    def self.gt_5
+        ids = Product.includes(:variants).select{|pr| pr.variants.count > 5}
         Product.where(id: ids)
     end
 

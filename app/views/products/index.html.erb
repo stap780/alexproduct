@@ -30,6 +30,15 @@
                 </div>
               </div>
             </div>
+            <div class="btn-group" role="group" aria-label="">
+              <div class="btn-group" role="group">
+                <button id="dropdownId" type="button" class="form-control dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">К-во вариантов</button>
+                <div class="dropdown-menu checkboxes" aria-labelledby="dropdownId">
+                  <div class="p-1"><%= f.label :lt_5 do %><%= f.check_box :lt_5 %> < 5<% end %></div>
+                  <div class="p-1"><%= f.label :gt_5 do %><%= f.check_box :gt_5 %> > 5 <% end %></div>
+                </div>
+              </div>
+            </div>
             <%= button_tag(type: 'submit', :class => "btn btn-info") do %>
         <span class="oi oi-magnifying-glass"></span>
       <% end %>
@@ -46,12 +55,13 @@
     <tr class="text-secondary">
       <th><%= check_box_tag 'selectAll', 'selectAll'%></th>
       <th></th>
-      <th>Sku</th>
+      <th>Артикул</th>
       <th>Barcode</th>
-      <th>Title</th>
-      <th>Desc</th>
-      <th>Quantity</th>
-      <th>Price</th>
+      <th>Название</th>
+      <th>Описание</th>
+      <th>К-во</th>
+      <th>Цена</th>
+      <th>К-во вариантов</th>
       <th colspan="2"></th>
     </tr>
   </thead>
@@ -67,6 +77,7 @@
         <td><%= product.desc %></td>
         <td><%= product.quantity %></td>
         <td><%= product.price %></td>
+        <td><%= product.variants.count.to_s %></td>
         <td><%= link_to '<span class="oi oi-eye"></span>'.html_safe, product %></td>
         <td><%= link_to '<span class="oi oi-trash"></span>'.html_safe, product, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
