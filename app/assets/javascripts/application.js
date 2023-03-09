@@ -90,8 +90,11 @@ $(document).ready(function() {
   const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
   const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
 
-  $('.dropdown-menu.checkboxes input').change(function() {
-    $('.dropdown-menu.checkboxes input').not(this).prop("checked", false);
+  $('.dropdown-menu1.checkboxes input').change(function() {
+    $('.dropdown-menu1.checkboxes input').not(this).prop("checked", false);
+  });
+  $('.dropdown-menu2.checkboxes input').change(function() {
+    $('.dropdown-menu2.checkboxes input').not(this).prop("checked", false);
   });
 
 });
