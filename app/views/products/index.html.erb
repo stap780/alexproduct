@@ -24,7 +24,7 @@
             <div class="btn-group" role="group" aria-label="">
               <div class="btn-group" role="group">
                 <button id="dropdownId" type="button" class="form-control dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Картинки</button>
-                <div class="dropdown-menu1 checkboxes" aria-labelledby="dropdownId">
+                <div class="dropdown-menu checkboxes1" aria-labelledby="dropdownId">
                   <div class="p-1"><%= f.label :with_images do %><%= f.check_box :with_images %> есть<% end %></div>
                   <div class="p-1"><%= f.label :without_images do %><%= f.check_box :without_images %> нет<% end %></div>
                 </div>
@@ -33,7 +33,7 @@
             <div class="btn-group" role="group" aria-label="">
               <div class="btn-group" role="group">
                 <button id="dropdownId" type="button" class="form-control dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">К-во вариантов</button>
-                <div class="dropdown-menu2 checkboxes" aria-labelledby="dropdownId">
+                <div class="dropdown-menu checkboxes2" aria-labelledby="dropdownId">
                   <div class="p-1"><%= f.label :lt_5 do %><%= f.check_box :lt_5 %> < 5<% end %></div>
                   <div class="p-1"><%= f.label :gt_5 do %><%= f.check_box :gt_5 %> > 5 <% end %></div>
                 </div>
