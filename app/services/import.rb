@@ -5,7 +5,7 @@ class Services::Import
     puts '=====>>>> СТАРТ MS XML '+Time.now.to_s
     url = "https://online.moysklad.ru/api/yandex/market/b26c08a6-9a47-11ed-0a80-0bf700011888/offer/c5eeb21a-9c0a-11ed-0a80-0f670017a5ec"
 		filename = url.split('/').last
-    download = open(url)
+    download = open(url, :read_timeout => 240 )
 		download_path = "#{Rails.public_path}"+"/"+filename
 		IO.copy_stream(download, download_path)
 
@@ -18,7 +18,7 @@ class Services::Import
       categories[c["id"]] = c.text
     end
 
-    offers.each do |pr|
+    offers.each_with_index do |pr, index|
       # params = pr.xpath("param").present? ? pr.xpath("param").map{ |p| p["name"]+":"+p.text if p["name"] != "Цена EBAY" && p["name"] != "Цена Etsy"}.join(' --- ') : ''
       avito_params = pr.xpath("param").select{ |p| p if p["name"].include?("avito") }.reject(&:blank?)
       sku_check = pr.xpath("param").present? ? pr.xpath("param").select{|p| p if p["name"].include?("article") } : []
@@ -54,7 +54,7 @@ class Services::Import
           end
         end
       end
-
+      break if Rails.env.development? && index == 5
 	  end
 
     # Product.where(quantity: nil).update_all(quantity: 0)
