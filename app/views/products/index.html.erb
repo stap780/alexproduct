@@ -4,6 +4,13 @@
   <div class="col-md-12 p-0"><small>Всего - <%= Product.count %></small></div>
   <div class="col-md-12 p-0"><small>Показано - <%= @products.count.to_s %></small></div>
 </div>
+<div class="col-1">
+    <% file_cron = "#{Rails.public_path}/avito.xml" %>
+    <% if File.file?(file_cron) %><%= link_to 'Файл Aito', "/avito.xml", target: '_blank', class:"btn btn-outline-secondary btn-sm" %><% end %>
+    <% file_cron = "#{Rails.public_path}/drom.xml" %>
+    <% if File.file?(file_cron) %><%= link_to 'Файл Drom', "/drom.xml", target: '_blank', class:"btn btn-outline-secondary btn-sm" %><% end %>
+</div>
+
 <div class="col-2 p-0">
   <div class="btn-group" role="group">
     <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle btn-sm" data-bs-toggle="dropdown">Действия</button>
@@ -11,6 +18,7 @@
       <%= link_to 'Создать', new_product_path, class: 'dropdown-item' %>
       <%= link_to 'Импорт', import_products_path, class: 'dropdown-item' %>
       <%= link_to 'Авито', avito_products_path, class: 'dropdown-item' %>
+      <%= link_to 'Дром', drom_products_path, class: 'dropdown-item' %>
     </div>
   </div>
 </div>

@@ -10,6 +10,7 @@ Rails.application.routes.draw do
       post :delete_selected
       get :import
       get :avito
+      get :drom
       post '/:id/create_variants', action: 'create_variants', as: 'create_variants'
       delete '/:id/images/:image_id', action: 'delete_image', as: 'delete_image'
     end

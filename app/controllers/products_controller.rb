@@ -94,6 +94,11 @@ class ProductsController < ApplicationController
     redirect_to products_path, notice: 'Запущен процесс создания файла авито. Дождитесь выполнении'
   end
 
+  def drom
+    Rails.env.development? ? Services::Export.drom : ExportDromJob.perform_later
+    redirect_to products_path, notice: 'Запущен процесс создания файла авито. Дождитесь выполнении'
+  end
+
   def create_variants
     Rails.env.development? ? Services::Import.create_variants(@product) : ProductVariantJob.perform_later(@product)
     redirect_to @product, notice: 'Запущен процесс создания вариантов. Дождитесь выполнении'
