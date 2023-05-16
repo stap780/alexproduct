@@ -4,7 +4,7 @@ class Product < ApplicationRecord
     has_many :variants, inverse_of: :product, dependent: :destroy
     accepts_nested_attributes_for :variants, :allow_destroy => true
     has_many_attached :images, dependent: :destroy
-    validates :images, size: { less_than: 10.megabytes , message: 'размер файла должен быть меньше 10Мб' }
+    validates :images, size: { less_than: 15.megabytes , message: 'размер файла должен быть меньше 15Мб' }
     validates :title, presence: true
     before_save :normalize_data_white_space
     scope :without_images, -> { left_joins(:images_attachments).where(active_storage_attachments: { id: nil }) }
