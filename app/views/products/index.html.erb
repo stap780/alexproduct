@@ -6,7 +6,7 @@
 </div>
 <div class="col-1">
     <% file_cron = "#{Rails.public_path}/avito.xml" %>
-    <% if File.file?(file_cron) %><%= link_to 'Файл Aito', "/avito.xml", target: '_blank', class:"btn btn-outline-secondary btn-sm" %><% end %>
+    <% if File.file?(file_cron) %><%= link_to 'Файл Avito', "/avito.xml", target: '_blank', class:"btn btn-outline-secondary btn-sm" %><% end %>
     <% file_cron = "#{Rails.public_path}/drom.xml" %>
     <% if File.file?(file_cron) %><%= link_to 'Файл Drom', "/drom.xml", target: '_blank', class:"btn btn-outline-secondary btn-sm" %><% end %>
 </div>

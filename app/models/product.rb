@@ -7,7 +7,6 @@ class Product < ApplicationRecord
     validates :images, size: { less_than: 10.megabytes , message: 'размер файла должен быть меньше 10Мб' }
     validates :title, presence: true
     before_save :normalize_data_white_space
-    # scope :with_images, -> { joins(:images_attachments).uniq }
     scope :without_images, -> { left_joins(:images_attachments).where(active_storage_attachments: { id: nil }) }
     scope :not_nill, -> { where("quantity > ?", 0) }
 
@@ -38,7 +37,6 @@ class Product < ApplicationRecord
     def image_urls
         return unless self.images.attached?
         self.images.map do |pr_image|
-            # puts pr_image.to_s
             pr_image.blob.attributes.slice('filename', 'byte_size', 'id').merge(url: pr_image_url(pr_image))
         end
     end
