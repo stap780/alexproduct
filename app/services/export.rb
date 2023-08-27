@@ -51,6 +51,7 @@ class Services::Export
                         xml.Title title 
                         xml.Description {xml.cdata(desc)}
                         xml.Price price
+                        xml.Stock quantity
                         xml.Category "Запчасти и аксессуары"
                         avito_params.each do |a_p|
                             key = a_p.split(':')[0]
@@ -97,6 +98,7 @@ class Services::Export
                                     xml.Title var.title.to_s 
                                     xml.Description {xml.cdata(var_desc)}
                                     xml.Price price
+                                    xml.Stock quantity
                                     xml.Category "Запчасти и аксессуары"
                                     avito_params.each do |a_p|
                                         key = a_p.split(':')[0]
