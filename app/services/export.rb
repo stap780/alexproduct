@@ -64,56 +64,56 @@ class Services::Export
                                         end
                                         }
                     }
-                    # if product.variants.present?
-                    #     product.variants.each do |var|
-                    #         if var.images.present?
-                    #             host = Rails.env.development? ? 'http://localhost:3000' : 'http://95.163.236.170'
-                    #             var_images = var.image_urls.map{|h| host+h[:url]}
-                    #             sku = var.sku.to_s
-                    #             var_desc = "<p>&#9989; Деталь в наличии</p>
-                    #                         <p>&#128194;Артикул: #{sku}</p>
-                    #                         <p>&#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134;</p>
-                    #                         <p></p>
-                    #                         <p>&#128662; Доставка по Москве и МО от 500р</p>
-                    #                         <p>&#128350; График работы ПН-ПТ 10:00 – 19:00</p> 
-                    #                         <p>&#128666; Отправка в регионы транспортными компаниями ПЭК, Деловые Линии, СДЭК, DPD, Авито Доставка</p> 
-                    #                         <p>&#128222; Звоните, пишите, добавляйте товары в избранное, чтобы не потерять!</p>
-                    #                         <p></p>
-                    #                         <p>&#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134;</p>
-                    #                         <p>Кросс номер: #{cross.to_s}</p>
-                    #                         <p>#{var.desc.to_s}</p>"
-                    #             var_time_begin = product.avito_date_begin.present? && var.period.present? ? 
-                    #                                 (product.avito_date_begin + "#{var.period}".to_i.day).strftime("%Y-%m-%dT09:00:00+03:00").to_s : 
-                    #                                 (Time.now.in_time_zone.strftime("%Y-%m-%d %H:%M")).to_s
+                    if product.variants.present?
+                        product.variants.each do |var|
+                            if var.images.present?
+                                host = Rails.env.development? ? 'http://localhost:3000' : 'http://95.163.236.170'
+                                var_images = var.image_urls.map{|h| host+h[:url]}
+                                sku = var.sku.to_s
+                                var_desc = "<p>&#9989; Деталь в наличии</p>
+                                            <p>&#128194;Артикул: #{sku}</p>
+                                            <p>&#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134;</p>
+                                            <p></p>
+                                            <p>&#128662; Доставка по Москве и МО от 500р</p>
+                                            <p>&#128350; График работы ПН-ПТ 10:00 – 19:00</p> 
+                                            <p>&#128666; Отправка в регионы транспортными компаниями ПЭК, Деловые Линии, СДЭК, DPD, Авито Доставка</p> 
+                                            <p>&#128222; Звоните, пишите, добавляйте товары в избранное, чтобы не потерять!</p>
+                                            <p></p>
+                                            <p>&#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134;</p>
+                                            <p>Кросс номер: #{cross.to_s}</p>
+                                            <p>#{var.desc.to_s}</p>"
+                                var_time_begin = product.avito_date_begin.present? && var.period.present? ? 
+                                                    (product.avito_date_begin + "#{var.period}".to_i.day).strftime("%Y-%m-%dT09:00:00+03:00").to_s : 
+                                                    (Time.now.in_time_zone.strftime("%Y-%m-%d %H:%M")).to_s
                             
-                    #             xml.send(:'Ad') {
-                    #                 xml.Id id+"_"+var.id.to_s
-                    #                 xml.DateBegin var_time_begin
-                    #                 # xml.DateEnd time_end
-                    #                 xml.ListingFee 'Package'
-                    #                 xml.AdStatus 'Free'
-                    #                 xml.ContactPhone contactphone
-                    #                 xml.Region region
-                    #                 xml.Address address
-                    #                 xml.Title var.title.to_s 
-                    #                 xml.Description {xml.cdata(var_desc)}
-                    #                 xml.Price price
-                    #                 xml.Stock quantity
-                    #                 xml.Category "Запчасти и аксессуары"
-                    #                 avito_params.each do |a_p|
-                    #                     key = a_p.split(':')[0]
-                    #                     value = a_p.split(':')[1]
-                    #                     xml.send(key.camelize, value) if key != 'Article'
-                    #                 end
-                    #                 xml.send(:'Images') {
-                    #                                 var_images.each do |image|
-                    #                                     xml.Image("url"=>image)
-                    #                                 end
-                    #                                 }
-                    #             }
-                    #         end
-                    #     end
-                    # end
+                                xml.send(:'Ad') {
+                                    xml.Id id+"_"+var.id.to_s
+                                    xml.DateBegin var_time_begin
+                                    # xml.DateEnd time_end
+                                    xml.ListingFee 'Package'
+                                    xml.AdStatus 'Free'
+                                    xml.ContactPhone contactphone
+                                    xml.Region region
+                                    xml.Address address
+                                    xml.Title var.title.to_s 
+                                    xml.Description {xml.cdata(var_desc)}
+                                    xml.Price price
+                                    xml.Stock quantity
+                                    xml.Category "Запчасти и аксессуары"
+                                    avito_params.each do |a_p|
+                                        key = a_p.split(':')[0]
+                                        value = a_p.split(':')[1]
+                                        xml.send(key.camelize, value) if key != 'Article'
+                                    end
+                                    xml.send(:'Images') {
+                                                    var_images.each do |image|
+                                                        xml.Image("url"=>image)
+                                                    end
+                                                    }
+                                }
+                            end
+                        end
+                    end
                 end			
             }
         }
