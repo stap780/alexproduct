@@ -1,0 +1,25 @@
+<%= turbo_frame_tag variant, class: "d-flex list-group-item py-2 border border-top-1 border-bottom-0 border-start-0 border-end-0 row", data: {}  do %>
+    <%= tag.div(variant.status, class: "col-1")%>
+    <%= tag.div(variant.sku, class: "col-1")%>
+    <%= tag.div(variant.title, class: "col-3")%>
+    <%= tag.div(variant.desc, class: "col-3")%>
+    <%= tag.div(variant.period, class: "col-1")%>
+    <%= tag.div(variant.images, class: "col-2 row") do %>
+        <% if variant.images.attached?%>
+            <% variant.images.each do |image |%>
+            <div class="col-6 p-0">
+                <%= image_tag url_for(image), class: "img-thumbnail" %>
+            </div>
+            <% end %>
+        <% else %>
+            <%= render partial: 'shared/run' if variant.status == 'Process'%>
+            <%= link_to play_icon, create_images_variants_path(variant), class: 'btn btn-outline-primary', 
+                                                                        data: {turbo_method: :post, turbo_confirm: "Запустить?"}, 
+                                                                        title: 'Запустить' if variant.status != 'Process' %>
+        <% end %>
+    <% end %>
+
+    <div class= "col-1 d-flex justify-content-end gap-2 align-items-center">
+        <%= render 'shared/edit_delete_link', object: variant %>
+    </div>
+<% end %>

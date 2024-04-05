@@ -1,9 +1,9 @@
 class ExportDromJob < ApplicationJob
-    queue_as :default
+    queue_as :export_drom
   
     def perform
       # Do something later
-      Services::Export.drom
+      ExportDrom.call
     end
   end
   

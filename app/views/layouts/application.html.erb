@@ -2,27 +2,31 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= content_for?(:title) ? yield(:title) : "CRM - "+Rails.application.class.parent_name.downcase %></title>
-    <meta name="description" content="<%= content_for?(:description) ? yield(:description) : Rails.application.class.parent_name.downcase %>">
-    <%= stylesheet_link_tag 'application', media: 'all' %>
-    <%= javascript_include_tag 'application' %>
+    <title><%= content_for?(:title) ? yield(:title) : "CRM - Alexproduct" %></title>
+    <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Alexproduct" %>">
     <%= csrf_meta_tags %>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic-bootstrap.min.css" integrity="sha256-BJ/G+e+y7bQdrYkS2RBTyNfBHpA9IuGaPmf9htub5MQ=" crossorigin="anonymous" />
+    <%= csp_meta_tag %>
+    
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
+  
   </head>
   <body>
     <header>
     <% if user_signed_in? && current_user.role.name != 'registered' %>  <%= render 'layouts/navigation' %> <% end %>
     </header>
     <main role="main" class="container-fluid mb-5">
-       <%= render 'layouts/messages' %>
+        <%= render "shared/modal"%>
+        <div id="our_flash" class="position-absolute start-50 translate-middle-x w-25" style="top: 20px;">
+          <%= render "shared/flash"%>
+        </div>
        <%= yield %>
     </main>
     <footer class="footer d-flex">
-				<div class="container-fluid">
-					<div class="row text-muted">
-          </div>
-          </div>
-          </footer>
-    <%= render partial: "/layouts/modal"%>
+      <div class="container-fluid">
+      <div class="row text-muted">
+      </div>
+      </div>
+    </footer>
   </body>
 </html>

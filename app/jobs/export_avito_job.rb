@@ -1,8 +1,8 @@
 class ExportAvitoJob < ApplicationJob
-  queue_as :default
+  queue_as :export_avito
 
   def perform
     # Do something later
-    Services::Export.avito
+    ExportAvito.call
   end
 end

@@ -3,26 +3,25 @@
   <div class="h3 col-md-12 p-0">Товары</div>
   <div class="col-md-12 p-0"><small>Всего - <%= Product.count %></small></div>
   <div class="col-md-12 p-0"><small>Показано - <%= @products.count.to_s %></small></div>
-</div>
-<div class="col-1">
-    <% file_cron = "#{Rails.public_path}/avito.xml" %>
-    <% if File.file?(file_cron) %><%= link_to 'Файл Avito', "/avito.xml", target: '_blank', class:"btn btn-outline-secondary btn-sm" %><% end %>
-    <% file_cron = "#{Rails.public_path}/drom.xml" %>
-    <% if File.file?(file_cron) %><%= link_to 'Файл Drom', "/drom.xml", target: '_blank', class:"btn btn-outline-secondary btn-sm" %><% end %>
-</div>
+</br>
+      <% file_cron = "#{Rails.public_path}/avito.xml" %>
+      <% if File.file?(file_cron) %><%= link_to 'Файл Avito', "/avito.xml", target: '_blank', class:"btn btn-outline-secondary btn-sm" %><% end %>
+      <% file_cron = "#{Rails.public_path}/drom.xml" %>
+      <% if File.file?(file_cron) %><%= link_to 'Файл Drom', "/drom.xml", target: '_blank', class:"btn btn-outline-secondary btn-sm" %><% end %>
+  </div>
 
-<div class="col-2 p-0">
-  <div class="btn-group" role="group">
-    <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle btn-sm" data-bs-toggle="dropdown">Действия</button>
-    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-      <%= link_to 'Создать', new_product_path, class: 'dropdown-item' %>
-      <%= link_to 'Импорт', import_products_path, class: 'dropdown-item' %>
-      <%= link_to 'Авито', avito_products_path, class: 'dropdown-item' %>
-      <%= link_to 'Дром', drom_products_path, class: 'dropdown-item' %>
+  <div class="col-1 p-0">
+    <div class="btn-group" role="group">
+      <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle btn-sm" data-bs-toggle="dropdown">Действия</button>
+      <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+        <%= link_to 'Создать', new_product_path, class: 'dropdown-item' %>
+        <%= link_to 'Импорт', import_products_path, class: 'dropdown-item', data: {turbo_stream: true } %>
+        <%= link_to 'Авито', avito_products_path, class: 'dropdown-item', data: {turbo_stream: true } %>
+        <%= link_to 'Дром', drom_products_path, class: 'dropdown-item' %>
+      </div>
     </div>
   </div>
-</div>
-  <%= search_form_for @search, {class: 'form-inline col-7 pl-0 pr-0 z-0'} do |f| %>
+  <%= search_form_for @search, {class: 'form-inline col-9 pl-0 pr-0 z-0'} do |f| %>
     <div class="input-group input-group-sm">
             <%= f.search_field :sku_eq , placeholder: 'sku', class: "form-control", style: "max-width: 180px;" %>
             <%= f.search_field :title_eq , placeholder: 'title', class: "form-control", style: "max-width: 180px;" %>
@@ -48,10 +47,10 @@
               </div>
             </div>
             <%= button_tag(type: 'submit', :class => "btn btn-info") do %>
-        <span class="oi oi-magnifying-glass"></span>
+        <i class="bi bi-search"></i>
       <% end %>
-      <%= link_to '<span class="oi oi-reload"></span>'.html_safe, products_path, class: 'btn btn-outline-dark d-flex justify-content-center align-items-center' %>
-      <%= link_to '<span class="oi oi-trash"></span>'.html_safe, delete_selected_products_path, class: 'btn btn-secondary de-flex justify-content-center align-items-center', id: 'deleteAll', remote: true %>
+      <%= link_to '<i class="bi bi-arrow-clockwise"></i>'.html_safe, products_path, class: 'btn btn-outline-dark d-flex justify-content-center align-items-center' %>
+      <%= link_to trash_icon, delete_selected_products_path, class: 'btn btn-secondary de-flex justify-content-center align-items-center', id: 'deleteAll', remote: true %>
     </div>
   <% end %>
 </div>
@@ -86,8 +85,7 @@
         <td><%= product.quantity %></td>
         <td><%= product.price %></td>
         <td><%= product.variants.count.to_s %></td>
-        <td><%= link_to '<span class="oi oi-eye"></span>'.html_safe, product %></td>
-        <td><%= link_to '<span class="oi oi-trash"></span>'.html_safe, product, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to trash_icon, product, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>

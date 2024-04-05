@@ -1,68 +1,57 @@
-<div class="row">
-<div class="col-6">
-<p><strong>Sku:</strong> <%= @product.sku %></p>
-<p><strong>Title:</strong> <%= @product.title %></p>
-<p><strong>Desc:</strong> <%= @product.desc %></p>
-<p><strong>Quantity:</strong> <%= @product.quantity %></p>
-<p><strong>Costprice:</strong> <%= @product.costprice %></p>
-<p><strong>Price:</strong> <%= @product.price %></p>
-<p><strong>Date Begin:</strong> <%= @product.avito_date_begin %></p>
-</div>
-<div class="col-6">
-  <%= render '/layouts/image_form', f: @product, size: '200x200', col: "col-4" %>
-</div>
+<div class="card p-3 my-2">
+  <div class="row">
+    <div class="col-2 btn-group my-4">
+      <%= link_to 'Редактировать', edit_product_path(@product) , class: 'btn btn-success' %>
+      <%= link_to 'Назад', products_path, class: 'btn btn-outline-primary' %>
+    </div>
+  </div>
 
-<div class="col-12 mt-4">
-<div class="row g-2">
-  <div class="col-2 h4">Варианты</div>
-  <%= link_to 'Создать варианты', create_variants_products_path(@product), method: :post, class: "col-2 btn btn-sm btn-secondary" %>
-</div>
-<div class="table-responsive mt-3">
-  <table class="table table-primary">
-    <thead>
-      <tr>
-        <th >#</th>
-        <th >Id</th>
-        <th >Sku</th>
-        <th >Название</th>
-        <th >Описание</th>
-        <th >Период</th>
-        <%# <th ></th> %>
-        <th >Картинки</th>
-      </tr>
-    </thead>
-    <tbody>
-    <% @product.variants.each_with_index do |variant, index|%>
-      <tr>
-      <td><%= index+1%>
-        <td style="max-width:30px;"><%= variant.id%></td>
-        <td><%= variant.sku%></td>
-        <td><%= variant.title%></td>
-        <td><%= variant.desc%></td>
-        <td><%= variant.period%></td>
-        <!--  <td style="max-width:170px;"> 
-        <%# form_tag create_images_variants_path(variant), method: :post do %>
-          <p><label>Color</label>
-          <%# select_tag "background", options_for_select(Product::ImageBackground) %>
-          <label>Size</label>
-          <%# select_tag "size", options_for_select(Product::ImageSize, '1200x1200') %></p>
-          <p><%# submit_tag "Create image", class: "btn btn-primary btn-sm" %></p>
-        <%# end %>
-        </td> -->
-          <td class="pt-0"><%= render '/layouts/image_form', f: variant , size: '150x150', col: "col-6"%></td>
-      </tr>
+  <div class="row">
+    <div class="col-6">
+      <p><strong>Sku:</strong> <%= @product.sku %> <strong>Date Begin:</strong> <%= @product.avito_date_begin %></p>
+      <p><strong>Title:</strong> <%= @product.title %></p>
+      <p><strong>Desc:</strong> <%= @product.desc %></p>
+      <p><strong>Quantity:</strong> <%= @product.quantity %> <strong>Costprice:</strong> <%= @product.costprice %> <strong>Price:</strong> <%= @product.price %></p>
+    </div>
+    <div class="col-6 row">
+      <% if @product.images.attached? %>
+
+        <% @product.images.each do |image| %>
+            <div class="col-4 align-items-center mt-1 image-item">
+              <%= image_tag image.variant(resize: '200x200'), class: 'img-thumbnail p-1' %>
+            </div>
+        <% end %>
+
       <% end %>
-    </tbody>
-  </table>
-</div>
-  
-</div>
+  </div>
 
-</div>
-
-<div class="row">
-<div class="col-2 btn-group mt-5">
-<%= link_to 'Редактировать', edit_product_path(@product) , class: 'btn btn-success' %>
-<%= link_to 'Назад', products_path, class: 'btn btn-outline-primary' %>
-</div>
+  <div class="col-12 mt-4">
+    <div class="row g-2">
+      <div class="col-2 h4">Варианты</div>
+      <%= link_to 'Создать варианты', create_variants_products_path(@product), method: :post, class: "col-2 btn btn-sm btn-secondary" %>
+    </div>
+    <div class="table-responsive mt-3">
+      <table class="table table-primary">
+        <thead>
+          <tr>
+            <th >#</th>
+            <th >Id</th>
+            <th >Sku</th>
+            <th >Название</th>
+            <th >Описание</th>
+            <th >Период</th>
+            <th >Картинки</th>
+          </tr>
+        </thead>
+        <tbody>
+        <%= turbo_stream_from 'variants'%>
+        <%= turbo_frame_tag 'variants', data: { } do %>
+          <% @product.variants.each_with_index do |variant, index|%>
+            <%= render "variants/variant", variant: variant %>
+          <% end %>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>

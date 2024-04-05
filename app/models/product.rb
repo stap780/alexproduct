@@ -3,10 +3,11 @@ class Product < ApplicationRecord
 
     has_many :variants, inverse_of: :product, dependent: :destroy
     accepts_nested_attributes_for :variants, :allow_destroy => true
-    has_many_attached :images, dependent: :destroy
+    has_many_attached :images, dependent: :purge
     validates :images, size: { less_than: 15.megabytes , message: 'размер файла должен быть меньше 15Мб' }
     validates :title, presence: true
     before_save :normalize_data_white_space
+
     scope :without_images, -> { left_joins(:images_attachments).where(active_storage_attachments: { id: nil }) }
     scope :not_nill, -> { where("quantity > ?", 0) }
 
@@ -14,10 +15,18 @@ class Product < ApplicationRecord
     ImageBackground = [['1','#b10ced'],['2','#8c0ced'],['3','#6d0ced'],['4','#2a0ced'],['5','#0c4ced'],['6','#052d7d'],['7','#054b7d'],['8','#057d61'],['9','#5d7d05'],['10','#7d5b05']].freeze
     ImageSize = ['600x600','800x800','1200x1200','1600x1600'].freeze
 
+    def self.ransackable_attributes(auth_object = nil)
+        Product.attribute_names
+    end
+
+    def self.ransackable_associations(auth_object = nil)
+        ["images_attachments", "images_blobs", "variants"]
+    end
     
     def self.ransackable_scopes(auth_object = nil)
 		[:with_images, :without_images, :lt_5, :gt_5]
 	end
+
 
     def self.with_images
         ids = Product.joins(:images_attachments).uniq.map(&:id)
@@ -53,6 +62,6 @@ class Product < ApplicationRecord
         self.attributes.each do |key, value|
             self[key] = value.squish if value.respond_to?("squish")
         end
-      end
+    end
   
 end

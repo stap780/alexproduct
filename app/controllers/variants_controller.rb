@@ -18,6 +18,16 @@ class VariantsController < ApplicationController
   # GET /variants/new
   def new
     @variant = Variant.new
+    @product_id = params[:product_id].present? ? params[:product_id] : nil
+    respond_to do |format|
+      # flash.now[:notice] = "Запустили"
+      format.turbo_stream  do
+        render turbo_stream: [
+          turbo_stream.replace("new_variant", partial: "variants/form", locals: {variant: @variant, product_id: @product_id})
+          #render_turbo_flash
+        ]
+      end
+    end
   end
 
   # GET /variants/1/edit
@@ -30,6 +40,7 @@ class VariantsController < ApplicationController
 
     respond_to do |format|
       if @variant.save
+        format.turbo_stream { flash.now[:success] = "Variant was successfully created." }
         format.html { redirect_to @variant, notice: "Variant was successfully created." }
         format.json { render :show, status: :created, location: @variant }
       else
@@ -44,6 +55,7 @@ class VariantsController < ApplicationController
   def update
     respond_to do |format|
       if @variant.update(variant_params)
+        format.turbo_stream { flash.now[:success] = "Variant was successfully updated." }
         format.html { redirect_to @variant, notice: "Variant was successfully updated." }
         format.json { render :show, status: :ok, location: @variant }
       else
@@ -57,18 +69,29 @@ class VariantsController < ApplicationController
   def destroy
     @variant.destroy
     respond_to do |format|
+      format.turbo_stream { flash.now[:success] = "Variant was successfully destroyed." }
       format.html { redirect_to variants_url, notice: "Variant was successfully destroyed." }
       format.json { head :no_content }
     end
   end
 
   def create_images
-    variant = Variant.find(params[:id])
-    variant.create_images(params[:background], params[:size])
+    VariantImageJob.perform_later(@variant.product.id, @variant.id) if @variant.product.images.present?
+    @variant.update!(status: "Process")
     respond_to do |format|
-      format.html { redirect_back(fallback_location: root_path,  notice: "Создали картинки" )}
-      format.json { head :no_content }
+      flash.now[:notice] = "Запустили"
+      format.turbo_stream  do
+        render turbo_stream: [
+          render_turbo_flash
+        ]
+      end
     end
+    # variant = Variant.find(params[:id])
+    # variant.create_images(params[:background], params[:size])
+    # respond_to do |format|
+    #   format.html { redirect_back(fallback_location: root_path,  notice: "Создали картинки" )}
+    #   format.json { head :no_content }
+    # end
   end
 
 # POST /variants
@@ -92,6 +115,6 @@ class VariantsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def variant_params
-      params.require(:variant).permit(:sku, :title, :desc, :product_id, :period)
+      params.require(:variant).permit(:status, :sku, :title, :desc, :product_id, :period, images: [])
     end
 end

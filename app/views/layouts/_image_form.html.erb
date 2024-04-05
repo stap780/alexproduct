@@ -1,14 +1,7 @@
-<% if !f.new_record? && f.images.present? %>
-<div class="row" <%= f %> >
-  <% f.images.each do |image| %>
-  <div class="<%= col %> row align-items-center mt-1 image-item">
-    <a class="img-thumbnail p-1" data-image="<%= image.metadata %>" href="<%= url_for(image)%>" target="_blank">
-      <%= image_tag image.variant(resize: size) %>
-    </a>
-    <div class="col-12 text-center">
-    <%= link_to '<span class="oi oi-trash"></span>'.html_safe, delete_image_products_path(f.id, image.id), method: :delete, class: "btn btn-success delete-image btn-sm mt-1", data: {confirm: "Are you sure?"}, remote: true %>
-    </div>
-  </div>
-  <% end %>
-</div>
+<div class="row d-flex" id = "images_list">
+  <% if !f.object.new_record? && f.object.images.attached? %>
+    <% f.object.images.each do |image| %>
+      <%= render partial: 'layouts/image_snippet', locals: {blob: image, f: f} %>
+    <% end %>
 <% end %>
+</div>

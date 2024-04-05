@@ -1,8 +1,8 @@
 class ImportProductJob < ApplicationJob
-  queue_as :default
+  queue_as :import_product
 
   def perform
     # Do something later
-    Services::Import.product
+    ProductImport.product
   end
 end

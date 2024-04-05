@@ -1,0 +1,3 @@
+<%= turbo_stream.update 'new_variant', '' %>
+<%= turbo_stream.append "variants", render(partial: "variants/variant", locals: {variant: @variant}) %>
+<%= prepend_flash %>

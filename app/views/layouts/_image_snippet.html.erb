@@ -1,0 +1,12 @@
+<%= turbo_frame_tag blob.id, class: "col-4" do %>
+    <input value="<%= blob.signed_id %>" autocomplete="off" type="hidden" name="product[images][]">
+    <div class="row align-items-center mt-1 blob-item" data-image-target="fileItem" style= "max-width: 200px;" >
+        <a class="img-thumbnail p-1" href="<%= url_for(blob)%>" target="_blank">
+            <%= image_tag url_for(blob), class: "w-100"%>
+        </a>
+        <div class="col-12 text-center">
+        <%# link_to trash_icon, delete_blob_products_path(f.object.id, blob.id), method: :delete, class: "btn btn-success delete-blob btn-sm mt-1", data: {confirm: "Are you sure?"}, remote: true %>
+        <%= link_to trash_icon, delete_image_products_path(blob_id: blob.id), data: {  turbo_method: :post,  turbo_confirm: "Are you sure?"}  %>
+        </div>
+    </div>
+<% end %>

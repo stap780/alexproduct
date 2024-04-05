@@ -1,59 +1,86 @@
 
-<%= simple_form_for(@product) do |f| %>
-  <%= f.error_notification %>
-  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+<%= form_with(model: product, class: "row", data: {turbo_frame: "_top"}) do |f| %>
+  <%= render "shared/errors", object: product %>
 
   <div class="row">
     <div class="col-12 h3"><%= page_title %></div>
     <div class="col-6 row">
-      <%= f.input :title, label: "Название", wrapper_html: { class: "col-12" }  %>
-      <%= f.input :sku, wrapper_html: { class: "col-3" }  %>
-      <%= f.input :barcode, wrapper_html: { class: "col-4" }  %>
-      <%= f.input :avito_date_begin, label: "Дата авито", as: :date, html5: true, wrapper_html: { class: "col-3" }  %>
-      <%= f.input :desc, label: "Описание", as: :text, wrapper_html: { class: "col-12" } , input_html: { rows: "5" } %> 
-      <%= f.input :avito_param, as: :text, label: "Avito параметры", wrapper_html: { class: "col-12" }   %>
-      <%= f.input :quantity, label: "К-во", wrapper_html: { class: "col-3" }   %>
-      <%= f.input :costprice, label: "Цена закупки", wrapper_html: { class: "col-3" }   %>
-      <%= f.input :price, label: "Цена" , wrapper_html: { class: "col-3" }  %>
-    </div>
-    <div class="col-6 row align-content-start">
-      <div class="col-12 mb-3 h3">Изображения</div>
-        <%= f.input :images, as: :file, label: false, :input_html => { :multiple => true } %>
-        <%= render '/layouts/image_form', :f => @product, size: '200x200', col: "col-4"  %>
+      <div class="col-12">
+        <%= f.label :title%>
+        <%= f.text_field :title, class: "form-control" %>
       </div>
-    <div class="col-12 row">
-    <div class="col-6">
-      <%= link_to_add_association "Добавить вариант", f, :variants, 'data-association-insertion-node' => "#variants", 
-                                                                    'data-association-insertion-method' => "append",
-                                                                    class: "btn btn-dark btn-sm mt-5 mb-3", 
-                                                                    onclick: "initLine()"  %>
+      <div class="col-3">
+        <%= f.label :sku%>
+      <%= f.text_field :sku, class: "form-control" %>
+      </div>
+      <div class="col-4">
+        <%= f.label :barcode%>
+      <%= f.text_field :barcode, class: "form-control" %>
+      </div>
+      <div class="col-3">
+        <%= f.label :avito_date_begin%>
+      <%= f.text_field :avito_date_begin, class: "form-control" %>
+      </div>
+      <div class="col-5">
+        <%= f.label :desc%>
+      <%= f.text_field :desc, class: "form-control" %> 
+      </div>
+      <div class="col-12">
+        <%= f.label :avito_param%>
+      <%= f.text_field :avito_param, class: "form-control" %>
+      </div>
+      <div class="col-3">
+        <%= f.label :quantity%>
+      <%= f.text_field :quantity, class: "form-control" %>
+      </div>
+      <div class="col-3">
+        <%= f.label :costprice%>
+      <%= f.text_field :costprice, class: "form-control"  %>
+      </div>
+      <div class="col-3">
+        <%= f.label :price%>
+        <%= f.text_field :price, class: "form-control" %>
+      </div>
     </div>
-    <div class="col-12">
-    <table class="table table-success table-striped" id="variants">
-      <thead>
-        <tr class="table-success">
-          <th>sku</th>
-          <th>название</th>
-          <th>описание</th>
-          <th>период</th>
-          <th colspan="1"></th>
-          <th>image</th>
-        </tr>
-      </thead>
-      <tbody class="">
-        <%= f.simple_fields_for :variants do |variant| %>
-          <%= render 'variant_fields', f: variant %>
-        <% end %>
-        </tbody>
-    </table>
+  <% if !f.object.new_record? %>
+    <div class="col-6 row align-content-start" data-controller="image"  data-image-target = "actionUrl" data-model-action-url="/products/<%=product.id%>/image_upload">
+      <div class="col-12 mb-3 h3">Изображения</div>
+        <%= f.file_field :images, :multiple => true, direct_upload: true, data: {action: "change->image#uploadFile", image_target: "filesInput" } %>
+        <%= render '/layouts/image_form', f: f , size: '200x200', col: "col-4"  %>
+      </div>
     </div>
-  </div>
+<% end %>
+<% if !f.object.new_record? %>
+    <div class="row">
+      <div class="col-6 my-4">
+        <%= link_to "#{add_icon} вариант".html_safe, new_variant_path(product_id: product.id), class: "btn btn-sm btn-primary float-start", 
+        data: {turbo_stream: true }, id: "add_new_variant_button" %>
+        <%= link_to 'Создать варианты', create_variants_products_path(product), data: {turbo_method: :post}, title: 'Запустить', class: "btn btn-sm btn-secondary" %>
+      </div>
+    </div>
+    <div class="row px-3">
+      <%= turbo_frame_tag Variant.new %>
+      <div class="row">
+        <div class="col-1 fw-semibold">status</div>
+        <div class="col-1 fw-semibold">sku</div>
+        <div class="col-3 fw-semibold">название</div>
+        <div class="col-3 fw-semibold">описание</div>
+        <div class="col-1 fw-semibold">период</div>
+        <div class="col-2 fw-semibold">image</div>
+        <div class="col-1 fw-semibold"></div>
+      </div>
+      <%= turbo_stream_from @product, :variants %>
+      <%= turbo_frame_tag @product, :variants do %>
+        <%= render @product.variants %>
+      <% end %>
+    </div>
+<% end %>
 
-</div>
-  <div class="row">
-  <div class="col-2 btn-group mt-5">
-    <%= f.button :submit, class: 'btn btn-success' %>
-    <%= link_to 'Назад', :back, class: 'btn btn-outline-primary' %>
   </div>
+  <div class="row">
+    <div class="col-2 btn-group mt-5">
+      <%= f.submit class: 'btn btn-success' %>
+      <%= link_to 'Назад', :back, class: 'btn btn-outline-primary' %>
+    </div>
   </div>
 <% end %>

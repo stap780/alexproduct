@@ -1,10 +1,30 @@
 class Variant < ApplicationRecord
     include Rails.application.routes.url_helpers
     belongs_to :product
-    has_many_attached :images, dependent: :destroy
+    has_many_attached :images, dependent: :purge
     default_scope { order(id: :asc) }
     validates :images, size: { less_than: 10.megabytes , message: 'размер файла должен быть меньше 10Мб' }
     validates :title, presence: true
+
+    after_create_commit { broadcast_prepend_to "variants" }
+    after_update_commit { broadcast_replace_to "variants" }
+    
+    include ActionView::RecordIdentifier
+
+    after_create_commit do 
+      broadcast_append_to [product, :variants], target: dom_id(product, :variants), partial: "variants/variant", locals: { variant: self }
+    end
+
+    after_update_commit do
+        broadcast_replace_to [product, :variants], target: self, partial: "variants/variant", locals: { variant: self }
+    end
+
+    STATUS = ["New","Process","Finish","Error"]
+
+    def self.ransackable_attributes(auth_object = nil)
+        Variant.attribute_names
+    end
+
 
     def create_images(background,size)
         self.images.each do |v_i|
@@ -47,7 +67,6 @@ class Variant < ApplicationRecord
             end
         end
     end
-
 
     def image_urls
         return unless self.images.attached?

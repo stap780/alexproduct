@@ -1,0 +1,18 @@
+<tr id=<%= dom_id(varinat)%>>
+    <td><%# index+1%><td>
+    <td style="max-width:30px;"><%= variant.id%></td>
+    <td><%= variant.sku%></td>
+    <td><%= variant.title%></td>
+    <td><%= variant.desc%></td>
+    <td><%= variant.period%></td>
+    <!--  <td style="max-width:170px;"> 
+    <%# form_tag create_images_variants_path(variant), method: :post do %>
+    <p><label>Color</label>
+    <%# select_tag "background", options_for_select(Product::ImageBackground) %>
+    <label>Size</label>
+    <%# select_tag "size", options_for_select(Product::ImageSize, '1200x1200') %></p>
+    <p><%# submit_tag "Create image", class: "btn btn-primary btn-sm" %></p>
+    <%# end %>
+    </td> -->
+    <td class="pt-0"><%# render '/layouts/image_form', f: variant , size: '150x150', col: "col-6"%></td>
+</tr>

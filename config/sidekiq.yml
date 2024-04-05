@@ -1,0 +1,18 @@
+:concurrency: 5
+
+:queues:
+    - default
+    - variant_image
+    - import_product
+    - export_avito
+    - export_drom
+:scheduler:
+  :dynamic: true
+
+
+development:
+  :concurrency: 5
+staging:
+  :concurrency: 10
+production:
+  :concurrency: 20
