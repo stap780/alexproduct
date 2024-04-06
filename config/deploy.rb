@@ -69,20 +69,20 @@ namespace :deploy do
       end
   end
 
-  namespace :sidekiq do  
-    desc 'Restart Sidekiq'
-    task :restart do
-      on roles(:app) do
-        execute :sudo, :systemctl, :restart, :sidekiq
-        execute :sudo, :systemctl, 'daemon-reload'
-      end
-    end
-  end
+  # namespace :sidekiq do  
+  #   desc 'Restart Sidekiq'
+  #   task :restart do
+  #     on roles(:app) do
+  #       execute :sudo, :systemctl, :restart, :sidekiq
+  #       execute :sudo, :systemctl, 'daemon-reload'
+  #     end
+  #   end
+  # end
 
   before :starting,     :check_revision
   after  :finishing,    :compile_assets
   after  :finishing,    :cleanup
-  after 'deploy:published', 'sidekiq:restart'
+  # after 'deploy:published', 'sidekiq:restart'
   
 end
   
