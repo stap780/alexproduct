@@ -26,16 +26,16 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :orders do
-    collection do
-      post :delete_selected
-      get :download
-      post :webhook
-      get :autocomplete_company_title
-      get :autocomplete_client_name
-    end
-  end
-  resources :clients
+  # resources :orders do
+  #   collection do
+  #     post :delete_selected
+  #     get :download
+  #     post :webhook
+  #     get :autocomplete_company_title
+  #     get :autocomplete_client_name
+  #   end
+  # end
+  # resources :clients
   root to: 'products#index'
   devise_for :users, controllers: {
     registrations: 'users/registrations',
