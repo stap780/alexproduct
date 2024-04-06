@@ -39,6 +39,8 @@ Rails.application.configure do
   # config.action_cable.mount_path = nil
   # config.action_cable.url = 'wss://example.com/cable'
   # config.action_cable.allowed_request_origins = [ 'http://example.com', /http:\/\/example.*/ ]
+  config.action_cable.url = "'ws://95.163.236.170/cable'"
+  config.action_cable.allowed_request_origins = ["http://95.163.236.170"]
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   # config.force_ssl = true
@@ -80,11 +82,10 @@ Rails.application.configure do
     password: 'email_provider_password'
   }
   # ActionMailer Config
-  config.action_mailer.default_url_options = { :host => 'domain_name' }
+  config.action_mailer.default_url_options = { :host => "http://95.163.236.170" }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = false
-
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
