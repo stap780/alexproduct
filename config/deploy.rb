@@ -12,7 +12,7 @@ set :puma_workers,    0
 
 set :branch, "main"
 set :pty,             true
-set :use_sudo,        false
+set :use_sudo,        true
 set :stage,           :production
 set :deploy_via,      :remote_cache
 set :deploy_to,       "/var/www/#{fetch(:application)}"
