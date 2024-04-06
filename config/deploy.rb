@@ -80,27 +80,6 @@ namespace :deploy do
 #     end
 #   end
 
-    namespace :sidekiq do
-        after 'deploy:starting', 'sidekiq:stop'
-        after 'deploy:finished', 'sidekiq:start'
-
-        task :stop do
-            on roles(:app) do
-                within current_path do
-                    execute('systemctl kill -s TSTP sidekiq')
-                    execute('systemctl stop sidekiq')
-                end
-            end
-        end
-
-        task :start do
-            on roles(:app) do |host|
-                execute('systemctl start sidekiq')
-                info "Host #{host} (#{host.roles.to_a.join(', ')}):\t#{capture(:uptime)}"
-            end
-        end
-    end
-
   before :starting,     :check_revision
   after  :finishing,    :compile_assets
   after  :finishing,    :cleanup
