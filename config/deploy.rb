@@ -41,28 +41,6 @@ namespace :puma do
     before 'deploy:starting', 'puma:make_dirs'
 end
 
-namespace :sidekiq do
-    desc "Overwritten sidekiq:{start, stop, restart}"
-    task :restart do
-      puts "Overwriting sidekiq:restart"
-      on roles(:all) do |host|
-        execute :systemctl, '--user','restart', 'sidekiq'
-      end
-    end
-    task :start do
-      puts "Overwriting sidekiq:start"
-      on roles(:all) do |host|
-        execute :systemctl, '--user','start', 'sidekiq'
-      end
-    end
-    task :stop do
-      puts "Overwriting sidekiq:stop"
-      on roles(:all) do |host|
-        execute :systemctl, '--user','stop', 'sidekiq'
-      end
-    end
-end
-
 namespace :deploy do
   desc "Make sure local git is in sync with remote."
   task :check_revision do
@@ -91,20 +69,20 @@ namespace :deploy do
       end
   end
 
-#   namespace :sidekiq do  
-#     desc 'Restart Sidekiq'
-#     task :restart do
-#       on roles(:app) do
-#         execute :sudo, :systemctl, :restart, :sidekiq
-#         execute :sudo, :systemctl, 'daemon-reload'
-#       end
-#     end
-#   end
+  namespace :sidekiq do  
+    desc 'Restart Sidekiq'
+    task :restart do
+      on roles(:app) do
+        execute :sudo, :systemctl, :restart, :sidekiq
+        execute :sudo, :systemctl, 'daemon-reload'
+      end
+    end
+  end
 
   before :starting,     :check_revision
   after  :finishing,    :compile_assets
   after  :finishing,    :cleanup
-#   after 'deploy:published', 'sidekiq:restart'
+  after 'deploy:published', 'sidekiq:restart'
   
 end
   
