@@ -3,16 +3,16 @@ class CreateVariantImage < ApplicationService
     def initialize(variant_id, index, image_ids)
     @variant = Variant.find_by_id(variant_id)
     @index = index
-    @error_message = nil
+    @error_message = false
     @image_ids = image_ids
     end
 
     def call
         result = create_image
-        if result
-            true
-        else
+        if @error_message
             false
+        else
+            true
         end
     end
 
@@ -51,11 +51,14 @@ class CreateVariantImage < ApplicationService
                                 # 28 => {"-crop" => "980x980+130+130","-unsharp" => "95%"},
                                 # 29 => {"-rotate" => "2", "-background" => "transparent", "-quality" => "92","-crop" => "980x980+130+130","-unsharp" => "95%"}
                             }
-
-        options = image_convert_rules[@index+1]
-        remove_images
-        create_convert_images(options)
-
+        rule = image_convert_rules[@index+1]
+        if rule.present?
+            options = rule
+            remove_images
+            create_convert_images(options)
+        else
+            @error_message = true
+        end
     end
     def remove_images
         if @variant.images.present?

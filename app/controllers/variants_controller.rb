@@ -76,22 +76,27 @@ class VariantsController < ApplicationController
   end
 
   def create_images
-    VariantImageJob.perform_later(@variant.product.id, @variant.id) if @variant.product.images.present?
-    @variant.update!(status: "Process")
-    respond_to do |format|
-      flash.now[:notice] = "Запустили"
-      format.turbo_stream  do
-        render turbo_stream: [
-          render_turbo_flash
-        ]
+    if @variant.product.images.attached?
+      VariantImageJob.perform_later(@variant.product.id, @variant.id)
+      @variant.update!(status: "Process")
+      respond_to do |format|
+        flash.now[:notice] = "Запустили"
+        format.turbo_stream  do
+          render turbo_stream: [
+            render_turbo_flash
+          ]
+        end
+      end
+    else
+      respond_to do |format|
+        flash.now[:notice] = "У товара нет картинок"
+        format.turbo_stream  do
+          render turbo_stream: [
+            render_turbo_flash
+          ]
+        end
       end
     end
-    # variant = Variant.find(params[:id])
-    # variant.create_images(params[:background], params[:size])
-    # respond_to do |format|
-    #   format.html { redirect_back(fallback_location: root_path,  notice: "Создали картинки" )}
-    #   format.json { head :no_content }
-    # end
   end
 
 # POST /variants
