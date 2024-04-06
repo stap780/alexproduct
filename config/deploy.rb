@@ -26,12 +26,6 @@ set :puma_preload_app, true
 set :puma_worker_timeout, nil
 set :puma_init_active_record, true  # Change to false when not using ActiveRecord
 
-set :sidekiq_roles => :worker
-set :sidekiq_default_hooks => true
-set :sidekiq_env => fetch(:rack_env, fetch(:rails_env, fetch(:stage)))
-# single config
-set :sidekiq_config_files, ['sidekiq.yml']
-
 append :linked_files, "config/master.key", "config/database.yml"
 append :linked_dirs, "log", "tmp/pids", "tmp/cache", "public", 'tmp/sockets', 'vendor/bundle', 'lib/tasks', 'lib/drop', 'storage'
 
@@ -46,7 +40,29 @@ namespace :puma do
   
     before 'deploy:starting', 'puma:make_dirs'
 end
-  
+
+namespace :sidekiq do
+    desc "Overwritten sidekiq:{start, stop, restart}"
+    task :restart do
+      puts "Overwriting sidekiq:restart"
+      on roles(:all) do |host|
+        execute :systemctl, '--user','restart', 'sidekiq'
+      end
+    end
+    task :start do
+      puts "Overwriting sidekiq:start"
+      on roles(:all) do |host|
+        execute :systemctl, '--user','start', 'sidekiq'
+      end
+    end
+    task :stop do
+      puts "Overwriting sidekiq:stop"
+      on roles(:all) do |host|
+        execute :systemctl, '--user','stop', 'sidekiq'
+      end
+    end
+end
+
 namespace :deploy do
   desc "Make sure local git is in sync with remote."
   task :check_revision do
