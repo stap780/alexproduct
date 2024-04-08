@@ -15,7 +15,7 @@
             <%= render partial: 'shared/run' if variant.status == 'Process'%>
             <%= link_to play_icon, create_images_variants_path(variant), class: 'btn btn-outline-primary', 
                                                                         data: {turbo_method: :post, turbo_confirm: "Запустить?"}, 
-                                                                        title: 'Запустить' if variant.status != 'Process' %>
+                                                                        title: 'Запустить' if variant.status == 'New' && !variant.images.attached?  %>
         <% end %>
     <% end %>
 

@@ -5,7 +5,8 @@ class ProductImport < ApplicationService
     puts '=====>>>> СТАРТ MS XML '+Time.now.to_s
     url = "https://online.moysklad.ru/api/yandex/market/b26c08a6-9a47-11ed-0a80-0bf700011888/offer/c5eeb21a-9c0a-11ed-0a80-0f670017a5ec"
 		filename = url.split('/').last
-    download = open(url, :read_timeout => 240 )
+    #download = open(url, :read_timeout => 240 )
+    download = URI.open(url)
 		download_path = "#{Rails.public_path}"+"/"+filename
 		IO.copy_stream(download, download_path)
 
