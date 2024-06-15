@@ -9,7 +9,7 @@ class ExportAvito < ApplicationService
             xml.send(:'Ads', :formatVersion => '3', :target => "Avito.ru") { 
             
                 products.each do |product|
-                    id = product.id.to_s
+                    id = product.avito_id.present? ? product.avito_id.to_s : product.id.to_s
                     time_begin = product.avito_date_begin.present? ? product.avito_date_begin.strftime("%Y-%m-%dT09:00:00+03:00").to_s : (Time.now.in_time_zone.strftime("%Y-%m-%d %H:%M")).to_s
                     time_end = (Time.now.in_time_zone+1.month).strftime("%Y-%m-%d").to_s
                     sku = product.sku.to_s
@@ -71,13 +71,14 @@ class ExportAvito < ApplicationService
                                 host = Rails.env.development? ? 'http://localhost:3000' : 'http://95.163.236.170'
                                 var_images = var.image_urls.map{|h| host+h[:url]}
                                 sku = var.sku.to_s
-                                var_desc = "<p>&#9989; Деталь в наличии</p>
+                                var_desc = "<p>Уважаемые покупатели, в летний период самовывоза нет, вы можете сделать заказ через Авито доставку.</p>
+                                            <p>&#9989; Деталь в наличии</p>
                                             <p>&#128194;Артикул: #{sku}</p>
                                             <p>&#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134;</p>
                                             <p></p>
                                             <p>&#128662; Доставка по Москве и МО от 500р</p>
                                             <p>&#128350; График работы ПН-ПТ 10:00 – 19:00</p> 
-                                            <p>&#128666; Отправка в регионы транспортными компаниями ПЭК, Деловые Линии, СДЭК, DPD, Авито Доставка</p> 
+                                            <p>&#128666; Отправка в регионы осуществляется через Авито Доставку, при оформлении выбирайте СДЭК, Боксбери, Яндекс доставку или Почту России, другими ТК не отправляем.</p> 
                                             <p>&#128222; Звоните, пишите, добавляйте товары в избранное, чтобы не потерять!</p>
                                             <p></p>
                                             <p>&#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134;</p>
