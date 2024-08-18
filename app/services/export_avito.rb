@@ -22,8 +22,7 @@ class ExportAvito < ApplicationService
                     avito_params = product.avito_param.split('---')
                     cross = avito_params.present? && avito_params.any?{|a| a.include?('cross')} ? 
                                     avito_params.select{|p| p.split(':')[1] if p.split(':')[0] == 'cross'}[0].split(':').last : ''
-                    desc = "<p>Уважаемые покупатели, в летний период самовывоза нет, вы можете сделать заказ через Авито доставку.</p>
-                            <p>&#9989; Деталь в наличии</p>
+                    desc = "<p>&#9989; Деталь в наличии</p>
                             <p>&#128194;Артикул: #{sku}</p>
                             <p>&#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134;</p>
                             <p></p>
@@ -71,8 +70,7 @@ class ExportAvito < ApplicationService
                                 host = Rails.env.development? ? 'http://localhost:3000' : 'http://95.163.236.170'
                                 var_images = var.image_urls.map{|h| host+h[:url]}
                                 sku = var.sku.to_s
-                                var_desc = "<p>Уважаемые покупатели, в летний период самовывоза нет, вы можете сделать заказ через Авито доставку.</p>
-                                            <p>&#9989; Деталь в наличии</p>
+                                var_desc = "<p>&#9989; Деталь в наличии</p>
                                             <p>&#128194;Артикул: #{sku}</p>
                                             <p>&#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134; &#10134;</p>
                                             <p></p>

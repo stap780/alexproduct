@@ -66,12 +66,6 @@ gem 'bcrypt_pbkdf', '< 2.0', :require => false
 gem 'ed25519', '~> 1.2', '>= 1.2.4'
 
 group :development do
-  # gem 'capistrano-rails'
-  # gem 'capistrano-rvm'
-  # gem 'capistrano3-unicorn'
-  # gem 'capistrano-rails-console'
-  # gem 'capistrano3-delayed-job'
-
   gem "capistrano", require: false
   gem "capistrano-rails", require: false
   gem 'capistrano-rvm', require: false
